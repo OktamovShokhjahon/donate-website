@@ -191,7 +191,7 @@ export default function RegisterForm() {
       {/* Parol talablari */}
       <div className="rounded-md bg-gray-50 p-4">
         <div className="text-sm text-gray-700 font-medium mb-2">
-          Parol quyidagilarni o'z ichiga olishi kerak:
+          Parol quyidagilarni o&apos;z ichiga olishi kerak:
         </div>
         <ul className="text-xs text-gray-600 space-y-1 list-disc pl-5">
           <li>Kamida 8 ta belgi</li>

@@ -19,7 +19,7 @@ export default function LoginPage() {
           Hisobingizga kiring
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Hisobingiz yo'qmi?{" "}
+          Hisobingiz yo&apos;qmi?{" "}
           <Link
             href="/register"
             className="font-medium text-gray-900 hover:underline"
