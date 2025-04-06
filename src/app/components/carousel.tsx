@@ -196,6 +196,7 @@ export default function GameCarousel() {
           1024: { slidesPerView: 4 },
         }}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
+        loop={true}
         className="cursor-grab active:cursor-grabbing"
       >
         {games.map((game) => (
