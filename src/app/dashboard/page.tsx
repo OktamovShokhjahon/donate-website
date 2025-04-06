@@ -17,7 +17,7 @@ function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [token, setToken] = useState(Cookies.get("token"));
+  const token = Cookies.get("token");
   const router = useRouter();
 
   if (!token) {
@@ -47,8 +47,8 @@ function Page() {
             balance: res.data.balance,
           });
         }
-      } catch (err) {
-        setError("Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi");
+      } catch (error) {
+        setError("Foydalanuvchi ma&apos;lumotlarini olishda xatolik yuz berdi");
       } finally {
         setLoading(false);
       }

@@ -18,6 +18,11 @@ interface FormValues {
   rememberMe: boolean;
 }
 
+interface ApiError {
+  detail: Array<{ loc: string[]; msg: string }>;
+  message?: string;
+}
+
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,9 +40,6 @@ export default function LoginForm() {
     setIsSubmitting(true);
     setError(null);
 
-    // API chaqiruvini simulyatsiya qilish
-    console.log("Kirish ma'lumotlari:", data);
-
     try {
       const res = await axios.post("https://asspay.up.railway.app/auth/login", {
         username: data.identifier,
@@ -53,12 +55,10 @@ export default function LoginForm() {
         setError(res.data.message);
         setIsSubmitting(false);
       }
-    } catch (err: any) {
-      const error = err as AxiosError<{
-        detail: Array<{ loc: string[]; msg: string }>;
-      }>;
-      if (err.response && err.response.status === 422) {
-        const errorDetail = err.response.data.detail[0];
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiError>;
+      if (axiosError.response?.status === 422) {
+        const errorDetail = axiosError.response.data.detail[0];
         if (errorDetail.loc[1] === "username") {
           setFormError("identifier", {
             type: "manual",
@@ -72,8 +72,8 @@ export default function LoginForm() {
         }
       } else {
         setError(
-          err.response?.data?.message ||
-            "Login jarayonida xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
+          axiosError.response?.data?.message ||
+            "Login jarayonida xatolik yuz berdi. Iltimos, qayta urinib ko&apos;ring."
         );
       }
       setIsSubmitting(false);
