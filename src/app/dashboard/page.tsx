@@ -47,7 +47,7 @@ function Page() {
             balance: res.data.balance,
           });
         }
-      } catch (error) {
+      } catch (_) {
         setError("Foydalanuvchi ma&apos;lumotlarini olishda xatolik yuz berdi");
       } finally {
         setLoading(false);
@@ -131,7 +131,7 @@ function Page() {
 
               <div className="bg-purple-50 rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
                 <h2 className="text-xl font-semibold text-purple-900 mb-4">
-                  So'nggi faoliyat
+                  So&apos;nggi faoliyat
                 </h2>
                 <p className="text-gray-600">Hech qanday faoliyat yo&apos;q</p>
               </div>
