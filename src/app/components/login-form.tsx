@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
@@ -54,6 +54,9 @@ export default function LoginForm() {
         setIsSubmitting(false);
       }
     } catch (err: any) {
+      const error = err as AxiosError<{
+        detail: Array<{ loc: string[]; msg: string }>;
+      }>;
       if (err.response && err.response.status === 422) {
         const errorDetail = err.response.data.detail[0];
         if (errorDetail.loc[1] === "username") {

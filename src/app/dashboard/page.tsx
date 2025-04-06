@@ -7,8 +7,14 @@ import axios from "axios";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-function page() {
-  const [user, setUser] = useState<any>(null);
+interface User {
+  username: string;
+  email: string;
+  balance: number;
+}
+
+function Page() {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState(Cookies.get("token"));
@@ -92,7 +98,7 @@ function page() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
                   <h2 className="text-xl font-semibold text-blue-900 mb-4">
-                    Foydalanuvchi ma'lumotlari
+                    Foydalanuvchi ma&apos;lumotlari
                   </h2>
                   <div className="space-y-3">
                     <div className="flex items-center">
@@ -127,7 +133,7 @@ function page() {
                 <h2 className="text-xl font-semibold text-purple-900 mb-4">
                   So'nggi faoliyat
                 </h2>
-                <p className="text-gray-600">Hech qanday faoliyat yo'q</p>
+                <p className="text-gray-600">Hech qanday faoliyat yo&apos;q</p>
               </div>
             </div>
           )}
@@ -137,4 +143,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
