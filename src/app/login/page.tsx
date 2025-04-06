@@ -18,15 +18,6 @@ export default function LoginPage() {
         <h2 className="mt-3 text-center text-3xl font-extrabold text-gray-900">
           Hisobingizga kiring
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Hisobingiz yo&apos;qmi?{" "}
-          <Link
-            href="/register"
-            className="font-medium text-gray-900 hover:underline"
-          >
-            Hisob yaratish
-          </Link>
-        </p>
       </div>
 
       <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">

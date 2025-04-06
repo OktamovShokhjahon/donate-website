@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface FormValues {
   identifier: string;
@@ -178,6 +179,16 @@ export default function LoginForm() {
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Kirish..." : "Kirish"}
         </Button>
+
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Hisobingiz yo&apos;qmi?{" "}
+          <Link
+            href="/register"
+            className="font-medium text-gray-900 hover:underline"
+          >
+            Hisob yaratish
+          </Link>
+        </p>
       </div>
 
       {/* Muqobil kirish usullari */}
