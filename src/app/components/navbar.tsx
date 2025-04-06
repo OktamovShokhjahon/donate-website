@@ -33,7 +33,13 @@ export default function Navbar() {
   const handleLogout = () => {
     Cookies.remove("token");
     setIsLoggedIn(false);
+    setIsMenuOpen(false);
     router.push("/");
+  };
+
+  const handleNavigation = (path: string) => {
+    setIsMenuOpen(false);
+    router.push(path);
   };
 
   return (
@@ -46,7 +52,11 @@ export default function Navbar() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Link href="/" className="flex items-center">
+          <Link
+            href="/"
+            className="flex items-center"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <motion.div
               className="mr-2 h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center"
               whileHover={{ scale: 1.1 }}
@@ -110,7 +120,7 @@ export default function Navbar() {
                 >
                   <Button
                     className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                    onClick={() => router.push("/dashboard")}
+                    onClick={() => handleNavigation("/dashboard")}
                   >
                     Dashboard
                   </Button>
@@ -135,7 +145,7 @@ export default function Navbar() {
                 >
                   <Button
                     className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                    onClick={() => router.push("/login")}
+                    onClick={() => handleNavigation("/login")}
                   >
                     Login
                   </Button>
@@ -146,7 +156,7 @@ export default function Navbar() {
                 >
                   <Button
                     className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                    onClick={() => router.push("/register")}
+                    onClick={() => handleNavigation("/register")}
                   >
                     Register
                   </Button>
@@ -189,7 +199,7 @@ export default function Navbar() {
                       >
                         <Button
                           className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
-                          onClick={() => router.push("/dashboard")}
+                          onClick={() => handleNavigation("/dashboard")}
                         >
                           Dashboard
                         </Button>
@@ -216,7 +226,7 @@ export default function Navbar() {
                       >
                         <Button
                           className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
-                          onClick={() => router.push("/login")}
+                          onClick={() => handleNavigation("/login")}
                         >
                           Login
                         </Button>
@@ -228,7 +238,7 @@ export default function Navbar() {
                       >
                         <Button
                           className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
-                          onClick={() => router.push("/register")}
+                          onClick={() => handleNavigation("/register")}
                         >
                           Register
                         </Button>
