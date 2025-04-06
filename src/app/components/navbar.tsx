@@ -1,16 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -93,22 +100,44 @@ export default function Navbar() {
           </motion.button> */}
 
           <div className="flex items-center space-x-2">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                onClick={() => router.push("/login")}
+            {isLoggedIn ? (
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Login
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                onClick={() => router.push("/register")}
-              >
-                Register
-              </Button>
-            </motion.div>
+                <Button
+                  className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
+                  onClick={() => router.push("/dashboard")}
+                >
+                  Dashboard
+                </Button>
+              </motion.div>
+            ) : (
+              <>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
+                    onClick={() => router.push("/login")}
+                  >
+                    Login
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
+                    onClick={() => router.push("/register")}
+                  >
+                    Register
+                  </Button>
+                </motion.div>
+              </>
+            )}
           </div>
         </motion.div>
 
@@ -136,30 +165,47 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="flex justify-between items-center space-x-4">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="w-full"
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button
-                      className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
-                      onClick={() => router.push("/login")}
+                  {isLoggedIn ? (
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="w-full"
+                      whileTap={{ scale: 0.95 }}
                     >
-                      Login
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-full"
-                  >
-                    <Button
-                      className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
-                      onClick={() => router.push("/register")}
-                    >
-                      Register
-                    </Button>
-                  </motion.div>
+                      <Button
+                        className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                        onClick={() => router.push("/dashboard")}
+                      >
+                        Dashboard
+                      </Button>
+                    </motion.div>
+                  ) : (
+                    <>
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="w-full"
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Button
+                          className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                          onClick={() => router.push("/login")}
+                        >
+                          Login
+                        </Button>
+                      </motion.div>
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-full"
+                      >
+                        <Button
+                          className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                          onClick={() => router.push("/register")}
+                        >
+                          Register
+                        </Button>
+                      </motion.div>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>

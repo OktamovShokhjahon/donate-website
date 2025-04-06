@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 interface FormValues {
   identifier: string;
@@ -18,28 +21,70 @@ interface FormValues {
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError: setFormError,
   } = useForm<FormValues>();
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
+    setError(null);
 
     // API chaqiruvini simulyatsiya qilish
     console.log("Kirish ma'lumotlari:", data);
 
-    // Haqiqiy ilovada, ma'lumotlarni API ga yuborasiz
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const res = await axios.post("https://asspay.up.railway.app/auth/login", {
+        username: data.identifier,
+        password: data.password,
+      });
 
-    setIsSubmitting(false);
-    // Qayta yo'naltirish yoki muvaffaqiyat xabarini ko'rsatish
+      if (res.data.token) {
+        Cookies.set("token", res.data.token);
+        router.push("/");
+      }
+
+      if (res.data.message) {
+        setError(res.data.message);
+        setIsSubmitting(false);
+      }
+    } catch (err: any) {
+      if (err.response && err.response.status === 422) {
+        const errorDetail = err.response.data.detail[0];
+        if (errorDetail.loc[1] === "username") {
+          setFormError("identifier", {
+            type: "manual",
+            message: errorDetail.msg,
+          });
+        } else if (errorDetail.loc[1] === "password") {
+          setFormError("password", {
+            type: "manual",
+            message: errorDetail.msg,
+          });
+        }
+      } else {
+        setError(
+          err.response?.data?.message ||
+            "Login jarayonida xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
+        );
+      }
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {error && (
+        <div className="rounded-md bg-red-50 p-4">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
+
       {/* Foydalanuvchi nomi/Email maydoni */}
       <div>
         <Label
