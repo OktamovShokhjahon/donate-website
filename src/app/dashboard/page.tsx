@@ -47,7 +47,7 @@ function Page() {
             balance: res.data.balance,
           });
         }
-      } catch (_) {
+      } catch (error) {
         setError("Foydalanuvchi ma&apos;lumotlarini olishda xatolik yuz berdi");
       } finally {
         setLoading(false);
