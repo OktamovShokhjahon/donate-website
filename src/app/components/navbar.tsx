@@ -15,9 +15,26 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("token");
-    setIsLoggedIn(!!token);
+    const checkAuth = () => {
+      const token = Cookies.get("token");
+      setIsLoggedIn(!!token);
+    };
+
+    // Initial check
+    checkAuth();
+
+    // Set up an interval to check for cookie changes
+    const interval = setInterval(checkAuth, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    setIsLoggedIn(false);
+    router.push("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -84,34 +101,32 @@ export default function Navbar() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          {/* <motion.button
-            className="text-gray-600 hover:text-gray-900"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <ShoppingCart className="h-6 w-6" />
-          </motion.button>
-          <motion.button
-            className="text-gray-600 hover:text-gray-900"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Bell className="h-6 w-6" />
-          </motion.button> */}
-
           <div className="flex items-center space-x-2">
             {isLoggedIn ? (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                  onClick={() => router.push("/dashboard")}
+              <>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Dashboard
-                </Button>
-              </motion.div>
+                  <Button
+                    className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
+                    onClick={() => router.push("/dashboard")}
+                  >
+                    Dashboard
+                  </Button>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    className="bg-red-500 cursor-pointer hover:bg-red-600 text-white"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                </motion.div>
+              </>
             ) : (
               <>
                 <motion.div
@@ -164,20 +179,34 @@ export default function Navbar() {
                     />
                   </div>
                 </div>
-                <div className="flex justify-between items-center space-x-4">
+                <div className="flex flex-col space-y-2">
                   {isLoggedIn ? (
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      className="w-full"
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Button
-                        className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
-                        onClick={() => router.push("/dashboard")}
+                    <>
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="w-full"
+                        whileTap={{ scale: 0.95 }}
                       >
-                        Dashboard
-                      </Button>
-                    </motion.div>
+                        <Button
+                          className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                          onClick={() => router.push("/dashboard")}
+                        >
+                          Dashboard
+                        </Button>
+                      </motion.div>
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className="w-full"
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Button
+                          className="bg-red-500 w-full cursor-pointer hover:bg-red-600 text-white"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Button>
+                      </motion.div>
+                    </>
                   ) : (
                     <>
                       <motion.div
