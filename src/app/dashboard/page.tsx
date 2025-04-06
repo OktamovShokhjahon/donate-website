@@ -48,6 +48,7 @@ function Page() {
           });
         }
       } catch (error) {
+        console.log(error);
         setError("Foydalanuvchi ma&apos;lumotlarini olishda xatolik yuz berdi");
       } finally {
         setLoading(false);
