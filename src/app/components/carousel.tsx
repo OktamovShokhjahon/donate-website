@@ -5,13 +5,14 @@ import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+
+import "swiper/css";
 
 export default function GameCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const games = [
@@ -76,33 +77,10 @@ export default function GameCarousel() {
   const visibleItems = 4;
   const totalItems = games.length;
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? totalItems - visibleItems : prevIndex - 1
-    );
-  };
-
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex >= totalItems - visibleItems ? 0 : prevIndex + 1
     );
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      handleNext();
-    }
-    if (touchStart - touchEnd < -75) {
-      handlePrev();
-    }
   };
 
   useEffect(() => {
@@ -113,11 +91,23 @@ export default function GameCarousel() {
     }
   }, [currentIndex]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="mt-[50px] relative w-full max-w-7xl mx-auto overflow-hidden">
-      <div
-        className="flex transition-transform duration-300 ease-out"
+      {/* <div
+        className="flex transition-transform duration-300 ease-out cursor-grab active:cursor-grabbing"
         ref={carouselRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -155,31 +145,87 @@ export default function GameCarousel() {
             </Link>
           </div>
         ))}
-      </div>
+      </div> */}
 
-      <button
-        onClick={handlePrev}
-        className={cn(
-          "absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2",
-          "hover:bg-white transition-colors duration-200",
-          "z-10"
-        )}
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="h-6 w-6" />
-      </button>
+      {/* <Swiper>
+        {games.map((game) => (
+          <SwiperSlide key={game.id}>
+            <div
+              className={cn(
+                "flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2",
+                "transition-all duration-300"
+              )}
+            >
+              <Link href="#" className="block h-full">
+                <div
+                  className={cn(
+                    "relative rounded-lg overflow-hidden h-full",
+                    game.bgColor
+                  )}
+                >
+                  <div className="relative">
+                    <Image
+                      src={game.image || "/placeholder.svg"}
+                      alt={game.name}
+                      width={300}
+                      height={150}
+                      className="w-full h-auto object-cover brightness-50"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <p className={cn("font-medium", game.textColor)}>
+                        {game.text}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper> */}
 
-      <button
-        onClick={handleNext}
-        className={cn(
-          "absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2",
-          "hover:bg-white transition-colors duration-200",
-          "z-10"
-        )}
-        aria-label="Next slide"
+      <Swiper
+        modules={[Autoplay, Navigation, Pagination]}
+        spaceBetween={16}
+        slidesPerView={1}
+        navigation
+        pagination={{ clickable: true }}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+        }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        className="cursor-grab active:cursor-grabbing"
       >
-        <ChevronRight className="h-6 w-6" />
-      </button>
+        {games.map((game) => (
+          <SwiperSlide key={game.id} className="p-2">
+            <Link href="#" className="block h-full">
+              <div
+                className={cn(
+                  "relative rounded-lg overflow-hidden h-full",
+                  game.bgColor
+                )}
+              >
+                <div className="relative">
+                  <Image
+                    src={game.image || "/placeholder.svg"}
+                    alt={game.name}
+                    width={300}
+                    height={150}
+                    className="w-full h-auto object-cover brightness-50"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className={cn("font-medium", game.textColor)}>
+                      {game.text}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
