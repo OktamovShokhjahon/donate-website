@@ -9,10 +9,11 @@ const games = [
   {
     id: 1,
     title: "Mobile Legends: Bang Bang",
-    image: "/pubg-logo.jpg",
+    image: "/mobile-legends.jpg",
     category: "games",
     currency: "Olmoslar",
     background: "bg-gradient-to-b from-orange-400 via-green-300 to-green-500",
+    link: "/mobile-legends",
   },
   {
     id: 2,
@@ -21,6 +22,7 @@ const games = [
     category: "games",
     currency: "UC",
     background: "bg-gradient-to-b from-gray-700 via-gray-600 to-gray-500",
+    link: "/pubg-mobile",
   },
   {
     id: 3,
@@ -29,6 +31,7 @@ const games = [
     category: "games",
     currency: "Olmoslar",
     background: "bg-gradient-to-b from-orange-500 via-orange-400 to-yellow-400",
+    link: "/free-fire",
   },
   {
     id: 4,
@@ -37,6 +40,7 @@ const games = [
     category: "games",
     currency: "Muhrlar",
     background: "bg-gradient-to-b from-slate-700 via-slate-600 to-slate-500",
+    link: "/identity-v",
   },
   {
     id: 5,
@@ -45,6 +49,7 @@ const games = [
     category: "games",
     currency: "Kristallar",
     background: "bg-gradient-to-b from-purple-400 via-purple-300 to-purple-200",
+    link: "/genshin-impact",
   },
   {
     id: 6,
@@ -53,6 +58,7 @@ const games = [
     category: "services",
     currency: "",
     background: "bg-gradient-to-b from-purple-800 via-purple-700 to-purple-600",
+    link: "/steam",
   },
   {
     id: 7,
@@ -61,6 +67,7 @@ const games = [
     category: "games",
     currency: "Sferalar",
     background: "bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700",
+    link: "/path-of-exile-2",
   },
   {
     id: 8,
@@ -69,6 +76,7 @@ const games = [
     category: "games",
     currency: "Obligatsiyalar",
     background: "bg-gradient-to-b from-gray-800 via-gray-700 to-gray-600",
+    link: "/arena-breakout",
   },
   {
     id: 9,
@@ -77,6 +85,7 @@ const games = [
     category: "games",
     currency: "Points",
     background: "bg-gradient-to-b from-red-600 via-red-500 to-red-400",
+    link: "/valorant",
   },
   {
     id: 10,
@@ -85,6 +94,7 @@ const games = [
     category: "games",
     currency: "Robux",
     background: "bg-gradient-to-b from-red-500 via-red-400 to-red-300",
+    link: "/roblox",
   },
   {
     id: 11,
@@ -93,6 +103,7 @@ const games = [
     category: "services",
     currency: "",
     background: "bg-gradient-to-b from-indigo-600 via-indigo-500 to-indigo-400",
+    link: "/discord-nitro",
   },
   {
     id: 12,
@@ -101,6 +112,7 @@ const games = [
     category: "games",
     currency: "Coins",
     background: "bg-gradient-to-b from-green-700 via-green-600 to-green-500",
+    link: "/minecraft",
   },
 ];
 

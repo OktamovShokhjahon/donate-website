@@ -23,14 +23,16 @@ export default function GameCarousel() {
       text: "Donat qilish foydali!",
       bgColor: "bg-zinc-900",
       textColor: "text-white",
+      link: "/z-game",
     },
     {
       id: 2,
       name: "Mobile Legends",
-      image: "/pubg.jpg",
+      image: "/mobile-legends.jpg",
       text: "Almazlar arzon!",
       bgColor: "bg-blue-600",
       textColor: "text-white",
+      link: "/mobile-legends",
     },
     {
       id: 3,
@@ -39,6 +41,7 @@ export default function GameCarousel() {
       text: "Narxlarni tushiramiz!",
       bgColor: "bg-purple-700",
       textColor: "text-white",
+      link: "/fortnite",
     },
     {
       id: 4,
@@ -47,6 +50,7 @@ export default function GameCarousel() {
       text: "Endi arzon!",
       bgColor: "bg-purple-400",
       textColor: "text-white",
+      link: "/roblox",
     },
     {
       id: 5,
@@ -55,6 +59,7 @@ export default function GameCarousel() {
       text: "Keshbek!",
       bgColor: "bg-red-500",
       textColor: "text-white",
+      link: "/game-5",
     },
     {
       id: 6,
@@ -63,6 +68,7 @@ export default function GameCarousel() {
       text: "Keshbek!",
       bgColor: "bg-red-500",
       textColor: "text-white",
+      link: "/game-6",
     },
     {
       id: 7,
@@ -71,6 +77,7 @@ export default function GameCarousel() {
       text: "Keshbek!",
       bgColor: "bg-red-500",
       textColor: "text-white",
+      link: "/game-7",
     },
   ];
 
@@ -101,89 +108,6 @@ export default function GameCarousel() {
 
   return (
     <div className="mt-[50px] relative w-full max-w-7xl mx-auto overflow-hidden">
-      {/* <div
-        className="flex transition-transform duration-300 ease-out cursor-grab active:cursor-grabbing"
-        ref={carouselRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {games.map((game) => (
-          <div
-            key={game.id}
-            className={cn(
-              "flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2",
-              "transition-all duration-300"
-            )}
-          >
-            <Link href="#" className="block h-full">
-              <div
-                className={cn(
-                  "relative rounded-lg overflow-hidden h-full",
-                  game.bgColor
-                )}
-              >
-                <div className="relative">
-                  <Image
-                    src={game.image || "/placeholder.svg"}
-                    alt={game.name}
-                    width={300}
-                    height={150}
-                    className="w-full h-auto object-cover brightness-50"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className={cn("font-medium", game.textColor)}>
-                      {game.text}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-        ))}
-      </div> */}
-
-      {/* <Swiper>
-        {games.map((game) => (
-          <SwiperSlide key={game.id}>
-            <div
-              className={cn(
-                "flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2",
-                "transition-all duration-300"
-              )}
-            >
-              <Link href="#" className="block h-full">
-                <div
-                  className={cn(
-                    "relative rounded-lg overflow-hidden h-full",
-                    game.bgColor
-                  )}
-                >
-                  <div className="relative">
-                    <Image
-                      src={game.image || "/placeholder.svg"}
-                      alt={game.name}
-                      width={300}
-                      height={150}
-                      className="w-full h-auto object-cover brightness-50"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className={cn("font-medium", game.textColor)}>
-                        {game.text}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper> */}
-
       <Swiper
         modules={[Autoplay, Navigation, Pagination]}
         spaceBetween={16}
@@ -201,20 +125,20 @@ export default function GameCarousel() {
       >
         {games.map((game) => (
           <SwiperSlide key={game.id} className="p-2">
-            <Link href="#" className="block h-full">
+            <Link href={game.link} className="block h-full">
               <div
                 className={cn(
-                  "relative rounded-lg overflow-hidden h-full",
+                  "relative rounded-lg overflow-hidden h-[200px] w-[300px]",
                   game.bgColor
                 )}
               >
-                <div className="relative">
+                <div className="relative h-full w-full">
                   <Image
                     src={game.image || "/placeholder.svg"}
                     alt={game.name}
                     width={300}
-                    height={150}
-                    className="w-full h-auto object-cover brightness-50"
+                    height={200}
+                    className="w-full h-full object-cover brightness-50"
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <p className={cn("font-medium", game.textColor)}>
