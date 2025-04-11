@@ -11,7 +11,8 @@ import {
   ClockIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 type PriceItem = {
   id: number;
@@ -24,6 +25,12 @@ type PriceItem = {
 function MobileLegendsPage() {
   const initialItemsToShow = 6;
   const [showAll, setShowAll] = useState(false);
+  const [token, setToken] = useState<string | undefined>(undefined);
+
+  // Initialize token from cookies on component mount
+  useEffect(() => {
+    setToken(Cookies.get("token"));
+  }, []);
 
   const priceItems: PriceItem[] = [
     {
@@ -137,18 +144,20 @@ function MobileLegendsPage() {
                   </p>
                 </div>
 
-                <div className="bg-white p-4 rounded-lg border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-2">
-                    🎟️
-                    <p className="text-sm font-medium">
-                      Telegram kanalimizga obuna bo&apos;lib 5% keshbekga ega
-                      bo&apos;ling
-                    </p>
+                {!token && (
+                  <div className="bg-white p-4 rounded-lg border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      🎟️
+                      <p className="text-sm font-medium">
+                        Telegram kanalimizga obuna bo&apos;lib 5% keshbekga ega
+                        bo&apos;ling
+                      </p>
+                    </div>
+                    <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-full">
+                      Kirish
+                    </Button>
                   </div>
-                  <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-full">
-                    Kirish
-                  </Button>
-                </div>
+                )}
               </div>
             </div>
           </div>
