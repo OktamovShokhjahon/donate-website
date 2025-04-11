@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
-  BoltIcon,
   CheckCircle,
   CheckIcon,
   ChevronDown,
@@ -22,7 +21,7 @@ type PriceItem = {
   badges: Array<"orange" | "pink">;
 };
 
-function page() {
+function MobileLegendsPage() {
   const initialItemsToShow = 6;
   const [showAll, setShowAll] = useState(false);
 
@@ -108,13 +107,14 @@ function page() {
                   <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-600 px-4 py-1.5 rounded-full mb-4 w-fit">
                     <CheckCircle className="h-4 w-4" />
                     <span className="text-sm font-medium">
-                      Rasmiy to'ldirish
+                      Rasmiy to&apos;ldirish
                     </span>
                   </div>
 
                   <p className="text-slate-700 mb-4">
-                    Mobile Legends-da ID orqali olmoslarni tezkor to'ldirish.
-                    Har qanday o'tish va birinchi xaridni ikki baravar oshirish.
+                    Mobile Legends-da ID orqali olmoslarni tezkor
+                    to&apos;ldirish. Har qanday o&apos;tish va birinchi xaridni
+                    ikki baravar oshirish.
                   </p>
                 </div>
               </div>
@@ -131,8 +131,8 @@ function page() {
                     />
                   </div>
                   <p className="text-sm text-slate-600">
-                    Olmoslar - Mobile Legends Bang Bang o'yinidagi premium
-                    valyuta bo'lib, qahramonlarni sotib olish va yangi
+                    Olmoslar - Mobile Legends Bang Bang o&apos;yinidagi premium
+                    valyuta bo&apos;lib, qahramonlarni sotib olish va yangi
                     kostyumlarni ochish uchun zarur.
                   </p>
                 </div>
@@ -141,7 +141,8 @@ function page() {
                   <div className="flex items-center gap-2">
                     🎟️
                     <p className="text-sm font-medium">
-                      Telegram kanalimizga obuna bo'lib 5% keshbekga ega bo'ling
+                      Telegram kanalimizga obuna bo&apos;lib 5% keshbekga ega
+                      bo&apos;ling
                     </p>
                   </div>
                   <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-full">
@@ -198,11 +199,11 @@ function page() {
             >
               {showAll ? (
                 <>
-                  Kamroq ko'rsatish <ChevronUp className="h-4 w-4" />
+                  Kamroq ko&apos;rsatish <ChevronUp className="h-4 w-4" />
                 </>
               ) : (
                 <>
-                  Hammasini ko'rsatish <ChevronDown className="h-4 w-4" />
+                  Hammasini ko&apos;rsatish <ChevronDown className="h-4 w-4" />
                 </>
               )}
             </Button>
@@ -216,7 +217,7 @@ function page() {
                     htmlFor="playerId"
                     className="text-gray-800 font-medium text-sm sm:text-base"
                   >
-                    O'yinchi ID
+                    O&apos;yinchi ID
                   </label>
                   <a
                     href="#"
@@ -259,7 +260,9 @@ function page() {
 
                 <div className="flex items-center gap-1 sm:gap-2">
                   <CheckIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
-                  <span className="text-xs sm:text-sm">To'liq xavfsiz</span>
+                  <span className="text-xs sm:text-sm">
+                    To&apos;liq xavfsiz
+                  </span>
                   <span className="text-blue-500 ml-1">🔒</span>
                 </div>
 
@@ -272,7 +275,7 @@ function page() {
                 <div className="flex items-center gap-1 sm:gap-2">
                   <CheckIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
                   <span className="text-xs sm:text-sm">
-                    Kun bo'yi ishlaymiz
+                    Kun bo&apos;yi ishlaymiz
                   </span>
                   <ClockIcon className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600 ml-1 flex-shrink-0" />
                 </div>
@@ -301,9 +304,9 @@ function page() {
                     className="text-xs sm:text-sm text-gray-600"
                   >
                     Men mintaqaviy cheklovlar bilan tanishdim va tushundimki,
-                    Rossiya hisoblarida faqat "Rossiya" mintaqasi ishlaydi. Men
-                    kerakli mintaqani tanlaganimni va qaytarish faqat sayt
-                    balansiga mumkinligini tasdiqlayman.
+                    Rossiya hisoblarida faqat &quot;Rossiya&quot; mintaqasi
+                    ishlaydi. Men kerakli mintaqani tanlaganimni va qaytarish
+                    faqat sayt balansiga mumkinligini tasdiqlayman.
                   </label>
                 </div>
               </div>
@@ -319,4 +322,4 @@ function page() {
   );
 }
 
-export default page;
+export default MobileLegendsPage;
