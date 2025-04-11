@@ -44,7 +44,6 @@ export default function RegisterForm() {
     setError(null);
 
     // API chaqiruvini simulyatsiya qilish
-    console.log("Forma ma'lumotlari:", data);
 
     axios
       .post("https://asspay.up.railway.app/auth/register", {
