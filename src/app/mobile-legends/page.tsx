@@ -104,7 +104,11 @@ function MobileLegendsPage() {
           }
         })
         .catch((err) => {
-          setUsername("Foydalanuvchi topilmadi");
+          if (err.status == 404) {
+            setUsername("Foydalanuvchi topilmadi");
+          } else {
+            setUsername("Kechirasiz qandaydir xatolik yuz berdi");
+          }
         });
     }
   };
