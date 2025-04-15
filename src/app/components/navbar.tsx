@@ -8,24 +8,40 @@ import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
+  const [balance, setBalance] = useState<number>(0);
 
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = () => {
-      
-    }
-    
+    const getUser = (token: string) => {
+      axios
+        .get("https://asspay.up.railway.app/auth/me", {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          if (res.data.username) {
+            setUser(res.data.username);
+            setBalance(res.data.balance);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
     const checkAuth = () => {
       const token = Cookies.get("token");
 
       if (token) {
-
+        getUser(token);
       }
 
       setIsLoggedIn(!!token);
@@ -52,6 +68,10 @@ export default function Navbar() {
     setIsMenuOpen(false);
     router.push(path);
   };
+
+  function formatNumberWithSpaces(number: number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
@@ -128,6 +148,21 @@ export default function Navbar() {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  className="pointer"
+                >
+                  <Button
+                    className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
+                    onClick={() => handleNavigation("/dashboard")}
+                  >
+                    {user}
+                  </Button>
+                </motion.div>
+                <div>
+                  <span>{formatNumberWithSpaces(balance)} uzs</span>
+                </div>
+                {/* <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <Button
                     className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
@@ -146,7 +181,7 @@ export default function Navbar() {
                   >
                     Logout
                   </Button>
-                </motion.div>
+                </motion.div> */}
               </>
             ) : (
               <>
