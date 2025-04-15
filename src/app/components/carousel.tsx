@@ -121,14 +121,14 @@ export default function GameCarousel() {
         }}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         loop={true}
-        className="cursor-grab active:cursor-grabbing"
+        className="cursor-grab active:cursor-grabbing gap-[15px]"
       >
         {games.map((game) => (
           <SwiperSlide key={game.id} className="p-2">
             <Link href={game.link} className="block h-full">
               <div
                 className={cn(
-                  "relative rounded-lg overflow-hidden h-[200px] w-[300px]",
+                  "relative rounded-lg overflow-hidden w-full h-[300px]",
                   game.bgColor
                 )}
               >
