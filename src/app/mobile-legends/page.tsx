@@ -14,6 +14,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type PriceItem = {
   id: number;
@@ -30,6 +31,8 @@ function MobileLegendsPage() {
   const [playerId, setPlayerId] = useState<string | undefined>(undefined);
   const [serverId, setServerId] = useState<string | undefined>(undefined);
   const [username, setUsername] = useState<string | undefined>(undefined);
+
+  const router = useRouter();
 
   useEffect(() => {
     setToken(Cookies.get("token"));
@@ -90,28 +93,53 @@ function MobileLegendsPage() {
     ? priceItems
     : priceItems.slice(0, initialItemsToShow);
 
-  const handleChange = () => {
-    if (playerId && serverId) {
-      axios
-        .get(
-          `https://api.isan.eu.org/nickname/ml?id=${playerId}&zone=${serverId}`
-        )
-        .then((res) => {
+  // const handleChange = () => {
+  //   if (playerId && serverId) {
+  //     axios
+  //       .get(
+  //         `https://api.isan.eu.org/nickname/ml?id=${playerId}&zone=${serverId}`
+  //       )
+  //       .then((res) => {
+  //         if (res.data.name) {
+  //           setUsername(`username: ${res.data.name}`);
+  //         } else {
+  //           setUsername("Foydalanuvchi topilmadi");
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         if (err.status == 404) {
+  //           setUsername("Foydalanuvchi topilmadi");
+  //         } else {
+  //           setUsername("Kechirasiz qandaydir xatolik yuz berdi");
+  //         }
+  //       });
+  //   }
+  // };
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (playerId && serverId) {
+        try {
+          const res = await axios.get(
+            `https://api.isan.eu.org/nickname/ml?id=${playerId}&zone=${serverId}`
+          );
           if (res.data.name) {
             setUsername(`username: ${res.data.name}`);
           } else {
             setUsername("Foydalanuvchi topilmadi");
           }
-        })
-        .catch((err) => {
-          if (err.status == 404) {
+        } catch (err: any) {
+          if (err?.response?.status === 404) {
             setUsername("Foydalanuvchi topilmadi");
           } else {
             setUsername("Kechirasiz qandaydir xatolik yuz berdi");
           }
-        });
-    }
-  };
+        }
+      }
+    };
+
+    fetchUsername();
+  }, [playerId, serverId]);
 
   return (
     <div className="w-full bg-gray-100 py-2 sm:py-4 px-2 sm:px-4">
@@ -179,7 +207,10 @@ function MobileLegendsPage() {
                         bo&apos;ling
                       </p>
                     </div>
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-full">
+                    <Button
+                      onClick={() => router.push("/login")}
+                      className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-8 rounded-full"
+                    >
                       Kirish
                     </Button>
                   </div>
@@ -267,6 +298,7 @@ function MobileLegendsPage() {
                   className="w-full border-gray-200"
                   onChange={(e) => {
                     setPlayerId(e.target.value);
+                    // handleChange();
                   }}
                 />
               </div>
@@ -284,18 +316,19 @@ function MobileLegendsPage() {
                   className="w-full border-gray-200"
                   onChange={(e) => {
                     setServerId(e.target.value);
+                    // handleChange();
                   }}
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <button
                   onClick={handleChange}
                   className="bg-[#2B7FFF] cursor-pointer px-[25px] py-[10px] rounded text-white"
                 >
                   Foydalanuvchini topish
                 </button>
-              </div>
+              </div> */}
 
               {username && (
                 <div>
