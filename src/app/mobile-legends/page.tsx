@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 type PriceItem = {
@@ -128,8 +128,9 @@ function MobileLegendsPage() {
           } else {
             setUsername("Foydalanuvchi topilmadi");
           }
-        } catch (err: any) {
-          if (err?.response?.status === 404) {
+        } catch (err) {
+          const error = err as AxiosError;
+          if (error?.response?.status === 404) {
             setUsername("Foydalanuvchi topilmadi");
           } else {
             setUsername("Kechirasiz qandaydir xatolik yuz berdi");
