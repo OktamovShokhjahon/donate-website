@@ -12,11 +12,22 @@ import Cookies from "js-cookie";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null)
+
   const router = useRouter();
 
   useEffect(() => {
+    const getUser = () => {
+      
+    }
+    
     const checkAuth = () => {
       const token = Cookies.get("token");
+
+      if (token) {
+
+      }
+
       setIsLoggedIn(!!token);
     };
 

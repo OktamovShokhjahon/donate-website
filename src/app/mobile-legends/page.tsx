@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 type PriceItem = {
   id: number;
@@ -26,8 +27,10 @@ function MobileLegendsPage() {
   const initialItemsToShow = 6;
   const [showAll, setShowAll] = useState(false);
   const [token, setToken] = useState<string | undefined>(undefined);
+  const [playerId, setPlayerId] = useState<string | undefined>(undefined);
+  const [serverId, setServerId] = useState<string | undefined>(undefined);
+  const [username, setUsername] = useState<string | undefined>(undefined);
 
-  // Initialize token from cookies on component mount
   useEffect(() => {
     setToken(Cookies.get("token"));
   }, []);
@@ -86,6 +89,25 @@ function MobileLegendsPage() {
   const displayedItems = showAll
     ? priceItems
     : priceItems.slice(0, initialItemsToShow);
+
+  const handleChange = () => {
+    if (playerId && serverId) {
+      axios
+        .get(
+          `https://api.isan.eu.org/nickname/ml?id=${playerId}&zone=${serverId}`
+        )
+        .then((res) => {
+          if (res.data.name) {
+            setUsername(`username: ${res.data.name}`);
+          } else {
+            setUsername("Foydalanuvchi topilmadi");
+          }
+        })
+        .catch((err) => {
+          setUsername("Foydalanuvchi topilmadi");
+        });
+    }
+  };
 
   return (
     <div className="w-full bg-gray-100 py-2 sm:py-4 px-2 sm:px-4">
@@ -239,6 +261,9 @@ function MobileLegendsPage() {
                   id="playerId"
                   placeholder="000000000"
                   className="w-full border-gray-200"
+                  onChange={(e) => {
+                    setPlayerId(e.target.value);
+                  }}
                 />
               </div>
 
@@ -253,8 +278,26 @@ function MobileLegendsPage() {
                   id="serverId"
                   placeholder="0000"
                   className="w-full border-gray-200"
+                  onChange={(e) => {
+                    setServerId(e.target.value);
+                  }}
                 />
               </div>
+
+              <div>
+                <button
+                  onClick={handleChange}
+                  className="bg-[#2B7FFF] cursor-pointer px-[25px] py-[10px] rounded text-white"
+                >
+                  Foydalanuvchini topish
+                </button>
+              </div>
+
+              {username && (
+                <div>
+                  <p>{username}</p>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 py-2 sm:py-3">
                 <div className="flex items-center gap-1 sm:gap-2">
