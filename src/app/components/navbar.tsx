@@ -47,22 +47,11 @@ export default function Navbar() {
       setIsLoggedIn(!!token);
     };
 
-    // Initial check
     checkAuth();
 
-    // Set up an interval to check for cookie changes
     const interval = setInterval(checkAuth, 1000);
-
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
-
-  const handleLogout = () => {
-    Cookies.remove("token");
-    setIsLoggedIn(false);
-    setIsMenuOpen(false);
-    router.push("/");
-  };
 
   const handleNavigation = (path: string) => {
     setIsMenuOpen(false);
