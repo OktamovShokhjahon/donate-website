@@ -160,28 +160,6 @@ export default function Navbar() {
                 <div>
                   <span>{formatNumberWithSpaces(balance)} uzs</span>
                 </div>
-                {/* <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button
-                    className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
-                    onClick={() => handleNavigation("/dashboard")}
-                  >
-                    Dashboard
-                  </Button>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button
-                    className="bg-red-500 cursor-pointer hover:bg-red-600 text-white"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
-                </motion.div> */}
               </>
             ) : (
               <>
@@ -237,41 +215,31 @@ export default function Navbar() {
                 </div>
                 <div className="flex flex-col space-y-2">
                   {isLoggedIn ? (
-                    <>
+                    <div className="flex items-center justify-between">
                       <motion.div
                         whileHover={{ scale: 1.05 }}
-                        className="w-full"
                         whileTap={{ scale: 0.95 }}
+                        className="pointer"
                       >
                         <Button
-                          className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                          className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
                           onClick={() => handleNavigation("/dashboard")}
                         >
-                          Dashboard
+                          {user}
                         </Button>
                       </motion.div>
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        className="w-full"
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Button
-                          className="bg-red-500 w-full cursor-pointer hover:bg-red-600 text-white"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </Button>
-                      </motion.div>
-                    </>
+                      <div>
+                        <span>{formatNumberWithSpaces(balance)} uzs</span>
+                      </div>
+                    </div>
                   ) : (
                     <>
                       <motion.div
                         whileHover={{ scale: 1.05 }}
-                        className="w-full"
                         whileTap={{ scale: 0.95 }}
                       >
                         <Button
-                          className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                          className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
                           onClick={() => handleNavigation("/login")}
                         >
                           Login
@@ -280,10 +248,9 @@ export default function Navbar() {
                       <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-full"
                       >
                         <Button
-                          className="bg-blue-500 w-full cursor-pointer hover:bg-blue-600 text-white"
+                          className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
                           onClick={() => handleNavigation("/register")}
                         >
                           Register
