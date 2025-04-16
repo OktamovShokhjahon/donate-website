@@ -222,7 +222,7 @@ export default function Navbar() {
                       </div>
                     </div>
                   ) : (
-                    <>
+                    <div className="flex justify-between items-center">
                       <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -245,7 +245,7 @@ export default function Navbar() {
                           Register
                         </Button>
                       </motion.div>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
