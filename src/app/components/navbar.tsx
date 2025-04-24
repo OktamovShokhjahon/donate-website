@@ -15,6 +15,7 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState<number>(0);
+  const [isCheckedOnce, setIsCheckedOnce] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -40,8 +41,9 @@ export default function Navbar() {
     const checkAuth = () => {
       const token = Cookies.get("token");
 
-      if (token) {
+      if (!isCheckedOnce && token) {
         getUser(token);
+        setIsCheckedOnce(true);
       }
 
       setIsLoggedIn(!!token);
@@ -49,8 +51,8 @@ export default function Navbar() {
 
     checkAuth();
 
-    const interval = setInterval(checkAuth, 1000);
-    return () => clearInterval(interval);
+    // const interval = setInterval(checkAuth, 1000);
+    // return () => clearInterval(interval);
   }, []);
 
   const handleNavigation = (path: string) => {

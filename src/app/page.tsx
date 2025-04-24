@@ -4,7 +4,7 @@ import GameMarketplace from "./components/game-cards/game-marketplace";
 function page() {
   return (
     <div>
-      <GameCarousel />
+      {/* <GameCarousel /> */}
       <GameMarketplace />
     </div>
   );
