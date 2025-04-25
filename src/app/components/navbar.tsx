@@ -15,9 +15,12 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState<number>(0);
-  const [isCheckedOnce, setIsCheckedOnce] = useState<boolean>(false);
 
   const router = useRouter();
+
+  // useEffect(() => {
+  //   window.location.reload();
+  // }, []);
 
   useEffect(() => {
     const getUser = (token: string) => {
@@ -41,9 +44,8 @@ export default function Navbar() {
     const checkAuth = () => {
       const token = Cookies.get("token");
 
-      if (!isCheckedOnce && token) {
+      if (token) {
         getUser(token);
-        setIsCheckedOnce(true);
       }
 
       setIsLoggedIn(!!token);
@@ -82,47 +84,49 @@ export default function Navbar() {
               whileTap={{ scale: 0.95 }}
             >
               <img src="/logo.png" alt="" />
-              {/* <span className="text-white font-bold">D</span> */}
             </motion.div>
-            {/* <div className="flex flex-col">
-              <span className="font-bold text-lg leading-tight">Donate</span>
-            </div> */}
           </Link>
         </motion.div>
 
-        <motion.button
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isMenuOpen ? (
-            <X className="h-6 w-6 cursor-pointer" />
+        <div className="flex  items-center gap-[10px]">
+          {!isLoggedIn ? (
+            <motion.button
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6 cursor-pointer" />
+              ) : (
+                <Menu className="h-6 w-6 cursor-pointer" />
+              )}
+              <span className="sr-only">Toggle menu</span>
+            </motion.button>
           ) : (
-            <Menu className="h-6 w-6 cursor-pointer" />
+            <>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="pointer"
+              >
+                <Button
+                  className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white"
+                  onClick={() => handleNavigation("/dashboard")}
+                >
+                  {user}
+                </Button>
+              </motion.div>
+              <div>
+                <span className="flex items-center gap-[5px]">
+                  {formatNumberWithSpaces(balance)}
+                  <img width={20} height={20} src="/coin.png" alt="" />
+                </span>
+              </div>
+            </>
           )}
-          <span className="sr-only">Toggle menu</span>
-        </motion.button>
+        </div>
 
-        <motion.div
-          className="hidden md:block flex-1 max-w-xl mx-4"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className="h-4 w-4 text-gray-400" />
-            </div>
-            <Input
-              type="text"
-              placeholder="Search for a game or service"
-              className="pl-10 w-full rounded-md border border-gray-300"
-            />
-          </div>
-        </motion.div>
-
-        {/* Right side icons - hidden on mobile, shown on md and up */}
         <motion.div
           className="hidden md:flex items-center space-x-4"
           initial={{ opacity: 0, x: 20 }}
@@ -191,18 +195,6 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
             >
               <div className="p-4">
-                <div className="mb-4">
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <Search className="h-4 w-4 text-gray-400" />
-                    </div>
-                    <Input
-                      type="text"
-                      placeholder="Search for a game or service"
-                      className="pl-10 w-full rounded-md border border-gray-300"
-                    />
-                  </div>
-                </div>
                 <div className="flex flex-col space-y-2">
                   {isLoggedIn ? (
                     <div className="flex items-center justify-between">

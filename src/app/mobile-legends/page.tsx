@@ -9,6 +9,7 @@ import {
   // ChevronDown,
   // ChevronUp,
   ClockIcon,
+  Star,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -62,6 +63,14 @@ function MobileLegendsPage() {
         if (res.data.prices) {
           res.data.prices.forEach((item: PriceItem) => {
             if (item.name.includes("| extra")) {
+              const replaced: string = item.name.replace("| extra", "");
+              const updated = replaced.replace(
+                /(\D+)(\d+)\+\d+/,
+                (_, prefix, firstNumber) => {
+                  return `${prefix}${firstNumber}+${firstNumber}`;
+                }
+              );
+              item.name = updated;
               extras.push(item);
             } else {
               regular.push(item);
@@ -127,12 +136,6 @@ function MobileLegendsPage() {
     return isAlreadyChosen;
   }
 
-  // const initialItemsToShow: number = priceItems ? priceItems.length : 0;
-
-  // const displayedItems =
-  //   priceItems && showAll
-  //     ? priceItems
-  //     : priceItems.slice(0, initialItemsToShow);
   const displayedItems = priceItems;
 
   async function handleSubmit() {
@@ -249,7 +252,7 @@ function MobileLegendsPage() {
             {extraItems.map((item) => (
               <div
                 key={item.id}
-                className={`cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
+                className={`relative cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
                   isChoosen(item.id)
                     ? "bg-[#eee]"
                     : "border border-gray-300 bg-white"
@@ -273,6 +276,12 @@ function MobileLegendsPage() {
                     </p>
                   </div>
                 </div>
+
+                <Star
+                  fill="yellow"
+                  stroke="yellow"
+                  className="absolute top-[-10px] right-[-10px] -rotate-90 animate-customPulse"
+                />
               </div>
             ))}
           </div>

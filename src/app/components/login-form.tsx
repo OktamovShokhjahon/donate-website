@@ -49,7 +49,11 @@ export default function LoginForm() {
 
       if (res.data.token) {
         Cookies.set("token", res.data.token);
-        router.push("/");
+        window.location.href = "/";
+
+        // setTimeout(() => {
+        // router.push("/");
+        // }, 100);
       }
 
       if (res.data.message) {

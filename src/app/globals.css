@@ -47,11 +47,6 @@ body {
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
-/* @layer base { */
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -127,6 +122,19 @@ body {
 
 body {
   @apply bg-background text-foreground;
+}
+
+@keyframes customPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+}
+.animate-customPulse {
+  animation: customPulse 1s infinite ease-in-out;
 }
 
 @media only screen and (max-width: 450px) {

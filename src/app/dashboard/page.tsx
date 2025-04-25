@@ -26,7 +26,7 @@ function Page() {
 
   const handleLogout = () => {
     Cookies.remove("token");
-    router.push("/login");
+    location.href = "/login";
   };
 
   useEffect(() => {
