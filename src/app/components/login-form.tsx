@@ -10,7 +10,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface FormValues {
@@ -28,7 +27,6 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const {
     register,
