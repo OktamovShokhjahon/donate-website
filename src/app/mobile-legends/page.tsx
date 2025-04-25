@@ -44,6 +44,7 @@ function MobileLegendsPage() {
   const [choosedItems, setChoosedItems] = useState<ChoosedItem[]>([]);
   const [userLog, setUserlog] = useState<string[]>([]);
   const [isTutorial, setIsTutorial] = useState<boolean>(false);
+  const [weekly, setWeekly] = useState<PriceItem>();
 
   const router = useRouter();
 
@@ -73,6 +74,8 @@ function MobileLegendsPage() {
               );
               item.name = updated;
               extras.push(item);
+            } else if (item.name === "Haftalik Propusk") {
+              setWeekly(item);
             } else {
               regular.push(item);
             }
@@ -342,6 +345,41 @@ function MobileLegendsPage() {
           </div>
 
           <div className="w-full h-[1px] my-[20px] bg-[#333]"></div>
+
+          {weekly && (
+            <div
+              key={weekly.id}
+              className={`relative cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
+                isChoosen(weekly.id)
+                  ? "bg-[#eee]"
+                  : "border border-gray-300 bg-white"
+              }`}
+              onClick={() => handleChoose(weekly.id)}
+            >
+              <div className="flex items-center gap-3">
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src={"/weekly.webp"}
+                    // src={
+                    //   textToRes(weekly.name) > 500
+                    //     ? "/more-diamond.webp"
+                    //     : "/diamonds.webp"
+                    // }
+                    alt={weekly.name}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-medium text-sm">{weekly.name}</h3>
+                  <p className="font-bold flex items-center gap-[5px]">
+                    {weekly.price}{" "}
+                    <Image width={20} height={20} src="/coin.png" alt="" />
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="w-full max-w-xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-sm mt-[30px]">
             <div className="space-y-4">
