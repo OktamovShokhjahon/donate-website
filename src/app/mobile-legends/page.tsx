@@ -171,6 +171,18 @@ function MobileLegendsPage() {
     }
   }
 
+  function textToRes(text: string): number {
+    const match = text.match(/(\d+\+\d+)/);
+
+    if (match) {
+      const expression = match[1];
+      const result = eval(expression);
+      return result;
+    } else {
+      return 0;
+    }
+  }
+
   return (
     <div className="w-full bg-gray-100 py-2 sm:py-4 px-2 sm:px-4">
       <div className="sm-container max-w-5xl mx-auto">
@@ -263,7 +275,11 @@ function MobileLegendsPage() {
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
                     <Image
-                      src="/character.webp"
+                      src={
+                        textToRes(item.name) > 500
+                          ? "/more-diamond.webp"
+                          : "/diamonds.webp"
+                      }
                       alt={item.name}
                       fill
                       className="object-cover rounded-md"
@@ -303,7 +319,11 @@ function MobileLegendsPage() {
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
                     <Image
-                      src="/character.webp"
+                      src={
+                        textToRes(item.name) > 500
+                          ? "/more-diamond.webp"
+                          : "/diamonds.webp"
+                      }
                       alt={item.name}
                       fill
                       className="object-cover rounded-md"
@@ -320,6 +340,8 @@ function MobileLegendsPage() {
               </div>
             ))}
           </div>
+
+          <div className="w-full h-[1px] my-[20px] bg-[#333]"></div>
 
           <div className="w-full max-w-xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-sm mt-[30px]">
             <div className="space-y-4">
@@ -389,7 +411,7 @@ function MobileLegendsPage() {
                     Barcha mintaqalar mavjud
                   </span>
                   <span className="text-blue-500 font-bold ml-1 text-xs sm:text-sm">
-                    🇷🇺🌎🇮🇩
+                    🌍🆔 (🇷🇺 ❌)
                   </span>
                 </div>
 
