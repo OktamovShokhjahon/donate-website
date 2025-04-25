@@ -68,22 +68,30 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <motion.div
-          className="flex items-center"
+          className=""
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
         >
           <Link
             href="/"
-            className="flex items-center"
+            className="flex items-center justify-between gap-[20px]"
             onClick={() => setIsMenuOpen(false)}
           >
             <motion.div
-              className="mr-2 h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center"
+              className="mr-2 h-8 w-8 rounded-full flex items-center justify-center"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
               <img src="/logo.png" alt="" />
+            </motion.div>
+
+            <motion.div
+              className="mr-2 h-8 w-8 rounded-full  flex items-center justify-center"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <p>FastDonate</p>
             </motion.div>
           </Link>
         </motion.div>

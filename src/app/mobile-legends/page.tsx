@@ -43,6 +43,7 @@ function MobileLegendsPage() {
   const [extraItems, setExtraItems] = useState<PriceItem[]>([]);
   const [choosedItems, setChoosedItems] = useState<ChoosedItem[]>([]);
   const [userLog, setUserlog] = useState<string[]>([]);
+  const [isTutorial, setIsTutorial] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -324,7 +325,7 @@ function MobileLegendsPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-[20px]">
                 <div className="space-y-2 w-1/2">
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center relative">
                     <label
                       htmlFor="playerId"
                       className="text-gray-800 font-medium text-sm sm:text-base"
@@ -332,11 +333,20 @@ function MobileLegendsPage() {
                       O&apos;yinchi ID
                     </label>
                     <a
-                      href="#"
-                      className="text-gray-600 text-xs sm:text-sm hover:underline"
+                      // href="#"
+                      onClick={() => setIsTutorial(!isTutorial)}
+                      className="cursor-pointer text-gray-600 text-xs sm:text-sm hover:underline"
                     >
                       Qayerdan topish mumkin?
                     </a>
+
+                    {isTutorial && (
+                      <img
+                        src="/how-to.jpg"
+                        className="absolute right-[-250px] top-[-80px]"
+                        alt=""
+                      />
+                    )}
                   </div>
                   <Input
                     id="playerId"
