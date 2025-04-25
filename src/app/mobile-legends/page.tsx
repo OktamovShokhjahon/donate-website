@@ -127,7 +127,7 @@ function MobileLegendsPage() {
     return isAlreadyChosen;
   }
 
-  const initialItemsToShow: number = priceItems ? priceItems.length : 0;
+  // const initialItemsToShow: number = priceItems ? priceItems.length : 0;
 
   // const displayedItems =
   //   priceItems && showAll
@@ -430,7 +430,7 @@ function MobileLegendsPage() {
               {userLog && (
                 <div>
                   {userLog.map((log) => {
-                    return <p>{log}</p>;
+                    return <p key={Math.random()}>{log}</p>;
                   })}
                 </div>
               )}
