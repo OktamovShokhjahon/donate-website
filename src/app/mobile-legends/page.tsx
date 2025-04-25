@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import {
   CheckCircle,
   CheckIcon,
-  ChevronDown,
-  ChevronUp,
+  // ChevronDown,
+  // ChevronUp,
   ClockIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -33,7 +33,7 @@ type Resp = {
 };
 
 function MobileLegendsPage() {
-  const [showAll, setShowAll] = useState(false);
+  // const [showAll, setShowAll] = useState(false);
   const [token, setToken] = useState<string | undefined>(undefined);
   const [playerId, setPlayerId] = useState<string | undefined>(undefined);
   const [serverId, setServerId] = useState<string | undefined>(undefined);
@@ -129,10 +129,11 @@ function MobileLegendsPage() {
 
   const initialItemsToShow: number = priceItems ? priceItems.length : 0;
 
-  const displayedItems =
-    priceItems && showAll
-      ? priceItems
-      : priceItems.slice(0, initialItemsToShow);
+  // const displayedItems =
+  //   priceItems && showAll
+  //     ? priceItems
+  //     : priceItems.slice(0, initialItemsToShow);
+  const displayedItems = priceItems;
 
   async function handleSubmit() {
     if (playerId && serverId && choosedItems.length > 0 && token) {
