@@ -96,7 +96,7 @@ export default function Navbar() {
           </Link>
         </motion.div>
 
-        <div className="flex  items-center gap-[10px]">
+        <div className="flex  items-center gap-[10px] md:hidden">
           {!isLoggedIn ? (
             <motion.button
               className="md:hidden"

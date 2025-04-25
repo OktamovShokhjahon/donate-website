@@ -136,32 +136,32 @@ export default function LoginForm() {
           </div> */}
         </div>
         <div className="mt-1 relative">
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            className={cn(errors.password && "border-red-500", "pr-10")}
-            {...register("password", {
-              required: "Parol kiritilishi shart",
-            })}
-          />
-          <button
-            type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5 text-gray-400" />
-            ) : (
-              <Eye className="h-5 w-5 text-gray-400" />
-            )}
-          </button>
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.password.message}
-            </p>
-          )}
+          <div className="flex">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              className={cn(errors.password && "border-red-500", "pr-10")}
+              {...register("password", {
+                required: "Parol kiritilishi shart",
+              })}
+            />
+            <button
+              type="button"
+              className={`absolute inset-y-0 right-0 top-0 pr-3 flex items-center`}
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5 text-gray-400" />
+              ) : (
+                <Eye className="h-5 w-5 text-gray-400" />
+              )}
+            </button>
+          </div>
         </div>
+        {errors.password && (
+          <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+        )}
       </div>
 
       {/* Meni eslab qolish */}
