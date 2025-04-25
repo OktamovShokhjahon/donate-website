@@ -18,19 +18,30 @@ import { useRouter } from "next/navigation";
 
 type PriceItem = {
   id: number;
-  title: string;
+  name: string;
   price: number;
   subtitle: string;
   badges: Array<"orange" | "pink">;
 };
 
+type ChoosedItem = {
+  id: string;
+};
+
+type Resp = {
+  message: string;
+};
+
 function MobileLegendsPage() {
-  const initialItemsToShow = 6;
   const [showAll, setShowAll] = useState(false);
   const [token, setToken] = useState<string | undefined>(undefined);
   const [playerId, setPlayerId] = useState<string | undefined>(undefined);
   const [serverId, setServerId] = useState<string | undefined>(undefined);
   const [username, setUsername] = useState<string | undefined>(undefined);
+  const [priceItems, setPriceItems] = useState<PriceItem[]>([]);
+  const [extraItems, setExtraItems] = useState<PriceItem[]>([]);
+  const [choosedItems, setChoosedItems] = useState<ChoosedItem[]>([]);
+  const [userLog, setUserlog] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -38,83 +49,36 @@ function MobileLegendsPage() {
     setToken(Cookies.get("token"));
   }, []);
 
-  const priceItems: PriceItem[] = [
-    {
-      id: 1,
-      title: "Сумеречный пропуск",
-      price: 1159,
-      subtitle: "",
-      badges: ["orange"],
-    },
-    {
-      id: 2,
-      title: "Недельный пропуск",
-      price: 237,
-      subtitle: "",
-      badges: ["orange", "pink"],
-    },
-    { id: 3, title: "8 алмазов", price: 16, subtitle: "", badges: [] },
-    { id: 4, title: "32+3 алмазов", price: 71, subtitle: "", badges: [] },
-    { id: 5, title: "80+8 алмазов", price: 181, subtitle: "", badges: [] },
-    { id: 6, title: "120+12 алмазов", price: 273, subtitle: "", badges: [] },
-    { id: 7, title: "239+25 алмазов", price: 549, subtitle: "", badges: [] },
-    { id: 8, title: "396+44 алмазов", price: 799, subtitle: "", badges: [] },
-    {
-      id: 9,
-      title: "800+88 алмазов",
-      price: 1599,
-      subtitle: "",
-      badges: ["orange"],
-    },
-    {
-      id: 10,
-      title: "1600+176 алмазов",
-      price: 3199,
-      subtitle: "",
-      badges: ["orange", "pink"],
-    },
-    {
-      id: 11,
-      title: "4000+440 алмазов",
-      price: 7999,
-      subtitle: "",
-      badges: ["orange"],
-    },
-    {
-      id: 12,
-      title: "8000+880 алмазов",
-      price: 15999,
-      subtitle: "",
-      badges: ["orange", "pink"],
-    },
-  ];
+  const baseUrl = "https://api.fastdonate.su";
 
-  const displayedItems = showAll
-    ? priceItems
-    : priceItems.slice(0, initialItemsToShow);
+  useEffect(() => {
+    console.log(priceItems);
 
-  // const handleChange = () => {
-  //   if (playerId && serverId) {
-  //     axios
-  //       .get(
-  //         `https://api.isan.eu.org/nickname/ml?id=${playerId}&zone=${serverId}`
-  //       )
-  //       .then((res) => {
-  //         if (res.data.name) {
-  //           setUsername(`username: ${res.data.name}`);
-  //         } else {
-  //           setUsername("Foydalanuvchi topilmadi");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         if (err.status == 404) {
-  //           setUsername("Foydalanuvchi topilmadi");
-  //         } else {
-  //           setUsername("Kechirasiz qandaydir xatolik yuz berdi");
-  //         }
-  //       });
-  //   }
-  // };
+    async function fetchPrices() {
+      try {
+        const extras: PriceItem[] = [];
+        const regular: PriceItem[] = [];
+        const res = await axios.get(`${baseUrl}/merchant/price_list`);
+        if (res.data.prices) {
+          res.data.prices.forEach((item: PriceItem) => {
+            if (item.name.includes("| extra")) {
+              extras.push(item);
+            } else {
+              regular.push(item);
+            }
+          });
+        } else {
+          setPriceItems([]);
+        }
+        setExtraItems(extras);
+        setPriceItems(regular);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchPrices();
+  }, []);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -123,6 +87,7 @@ function MobileLegendsPage() {
           const res = await axios.get(
             `https://api.isan.eu.org/nickname/ml?id=${playerId}&zone=${serverId}`
           );
+          console.log(res.data);
           if (res.data.name) {
             setUsername(`username: ${res.data.name}`);
           } else {
@@ -141,6 +106,65 @@ function MobileLegendsPage() {
 
     fetchUsername();
   }, [playerId, serverId]);
+
+  function handleChoose(id: number) {
+    const strId = String(id);
+
+    const isAlreadyChosen = choosedItems.some((item) => item.id === strId);
+
+    if (isAlreadyChosen) {
+      setChoosedItems((prev) => prev.filter((item) => item.id !== strId));
+    } else {
+      setChoosedItems((prev) => [...prev, { id: strId }]);
+    }
+  }
+
+  function isChoosen(id: number) {
+    const strId = String(id);
+
+    const isAlreadyChosen = choosedItems.some((item) => item.id === strId);
+
+    return isAlreadyChosen;
+  }
+
+  const initialItemsToShow: number = priceItems ? priceItems.length : 0;
+
+  const displayedItems =
+    priceItems && showAll
+      ? priceItems
+      : priceItems.slice(0, initialItemsToShow);
+
+  async function handleSubmit() {
+    if (playerId && serverId && choosedItems.length > 0 && token) {
+      try {
+        const products: string[] = [];
+
+        choosedItems.forEach((item) => products.push(item.id));
+
+        const res = await axios.post(
+          `${baseUrl}/merchant/buy`,
+          {
+            products,
+            user_id: playerId,
+            server_id: serverId,
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
+
+        if (res.data.data) {
+          res.data.data.forEach((item: Resp) => {
+            setUserlog((prev) => [...prev, item.message]);
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
 
   return (
     <div className="w-full bg-gray-100 py-2 sm:py-4 px-2 sm:px-4">
@@ -174,9 +198,9 @@ function MobileLegendsPage() {
                   </div>
 
                   <p className="text-slate-700 mb-4">
-                    Mobile Legends-da ID orqali olmoslarni tezkor
-                    to&apos;ldirish. Har qanday o&apos;tish va birinchi xaridni
-                    ikki baravar oshirish.
+                    Mobile Legends hisobingizga ID orqali olmoslarni tez va oson
+                    to‘ldiring. Xaridlaringizni tezda amalga oshiring va sizni
+                    kutayotgan keshbekni qo‘lga kiriting!
                   </p>
                 </div>
               </div>
@@ -221,115 +245,116 @@ function MobileLegendsPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-[30px]">
-            {displayedItems.map((item) => (
+            {extraItems.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex items-center justify-between"
+                className={`cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
+                  isChoosen(item.id)
+                    ? "bg-[#eee]"
+                    : "border border-gray-300 bg-white"
+                }`}
+                onClick={() => handleChoose(item.id)}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
                     <Image
                       src="/character.webp"
-                      alt={item.title}
+                      alt={item.name}
                       fill
                       className="object-cover rounded-md"
                     />
                   </div>
                   <div>
-                    <h3 className="font-medium text-sm">{item.title}</h3>
-                    <p className="font-bold">{item.price} ₽</p>
+                    <h3 className="font-medium text-sm">{item.name}</h3>
+                    <p className="font-bold flex items-center gap-[5px]">
+                      {item.price}{" "}
+                      <Image width={20} height={20} src="/coin.png" alt="" />
+                    </p>
                   </div>
-                </div>
-                <div className="flex gap-1">
-                  {item.badges.includes("orange") && (
-                    <div className="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white">
-                      <span className="sr-only">Orange badge</span>
-                      <span className="text-xs">!</span>
-                    </div>
-                  )}
-                  {item.badges.includes("pink") && (
-                    <div className="w-6 h-6 rounded-full bg-pink-500 flex items-center justify-center text-white">
-                      <span className="sr-only">Pink badge</span>
-                      <span className="text-xs">%</span>
-                    </div>
-                  )}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="flex justify-center mt-8">
-            <Button
-              variant="outline"
-              onClick={() => setShowAll(!showAll)}
-              className="rounded-full px-6 py-2 flex items-center gap-2"
-            >
-              {showAll ? (
-                <>
-                  Kamroq ko&apos;rsatish <ChevronUp className="h-4 w-4" />
-                </>
-              ) : (
-                <>
-                  Hammasini ko&apos;rsatish <ChevronDown className="h-4 w-4" />
-                </>
-              )}
-            </Button>
+          <div className="w-full h-[1px] my-[20px] bg-[#333]"></div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-[30px]">
+            {displayedItems.map((item) => (
+              <div
+                key={item.id}
+                className={`cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
+                  isChoosen(item.id)
+                    ? "bg-[#eee]"
+                    : "border border-gray-300 bg-white"
+                }`}
+                onClick={() => handleChoose(item.id)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="relative w-12 h-12 flex-shrink-0">
+                    <Image
+                      src="/character.webp"
+                      alt={item.name}
+                      fill
+                      className="object-cover rounded-md"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-sm">{item.name}</h3>
+                    <p className="font-bold flex items-center gap-[5px]">
+                      {item.price}{" "}
+                      <Image width={20} height={20} src="/coin.png" alt="" />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="w-full max-w-xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-sm mt-[30px]">
             <div className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
+              <div className="flex items-center gap-[20px]">
+                <div className="space-y-2 w-1/2">
+                  <div className="flex justify-between items-center">
+                    <label
+                      htmlFor="playerId"
+                      className="text-gray-800 font-medium text-sm sm:text-base"
+                    >
+                      O&apos;yinchi ID
+                    </label>
+                    <a
+                      href="#"
+                      className="text-gray-600 text-xs sm:text-sm hover:underline"
+                    >
+                      Qayerdan topish mumkin?
+                    </a>
+                  </div>
+                  <Input
+                    id="playerId"
+                    placeholder="000000000"
+                    className="w-full border-gray-200"
+                    onChange={(e) => {
+                      setPlayerId(e.target.value);
+                    }}
+                  />
+                </div>
+
+                <div className="space-y-2 w-1/2 flex flex-col">
                   <label
-                    htmlFor="playerId"
+                    htmlFor="serverId"
                     className="text-gray-800 font-medium text-sm sm:text-base"
                   >
-                    O&apos;yinchi ID
+                    Server ID
                   </label>
-                  <a
-                    href="#"
-                    className="text-gray-600 text-xs sm:text-sm hover:underline"
-                  >
-                    Qayerdan topish mumkin?
-                  </a>
+                  <Input
+                    id="serverId"
+                    placeholder="0000"
+                    className="w-full border-gray-200"
+                    onChange={(e) => {
+                      setServerId(e.target.value);
+                    }}
+                  />
                 </div>
-                <Input
-                  id="playerId"
-                  placeholder="000000000"
-                  className="w-full border-gray-200"
-                  onChange={(e) => {
-                    setPlayerId(e.target.value);
-                    // handleChange();
-                  }}
-                />
               </div>
-
-              <div className="space-y-2">
-                <label
-                  htmlFor="serverId"
-                  className="text-gray-800 font-medium text-sm sm:text-base"
-                >
-                  Server ID
-                </label>
-                <Input
-                  id="serverId"
-                  placeholder="0000"
-                  className="w-full border-gray-200"
-                  onChange={(e) => {
-                    setServerId(e.target.value);
-                    // handleChange();
-                  }}
-                />
-              </div>
-
-              {/* <div>
-                <button
-                  onClick={handleChange}
-                  className="bg-[#2B7FFF] cursor-pointer px-[25px] py-[10px] rounded text-white"
-                >
-                  Foydalanuvchini topish
-                </button>
-              </div> */}
 
               {username && (
                 <div>
@@ -401,7 +426,19 @@ function MobileLegendsPage() {
                 </div>
               </div>
 
-              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 sm:py-6 text-base sm:text-lg">
+              {userLog && (
+                <div>
+                  {userLog.map((log) => {
+                    return <p>{log}</p>;
+                  })}
+                </div>
+              )}
+
+              <Button
+                disabled={token ? false : true}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 sm:py-6 text-base sm:text-lg"
+                onClick={handleSubmit}
+              >
                 Sotib olish
               </Button>
             </div>

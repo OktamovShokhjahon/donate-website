@@ -46,7 +46,7 @@ export default function RegisterForm() {
     // API chaqiruvini simulyatsiya qilish
 
     axios
-      .post("https://asspay.up.railway.app/auth/register", {
+      .post("https://api.fastdonate.su/auth/register", {
         email: data.email,
         username: data.username,
         password: data.password,
@@ -74,7 +74,6 @@ export default function RegisterForm() {
             });
           }
         } else {
-          // Handle other errors
           setError(
             "Ro'yxatdan o'tishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
           );

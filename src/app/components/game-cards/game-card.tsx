@@ -44,7 +44,7 @@ export default function GameCard({ game }: GameCardProps) {
         )}
 
         {/* Game title */}
-        <h3 className="text-center font-medium text-white mt-2">
+        <h3 className="text-center font-medium text-[25px] text-white mt-2">
           {game.title}
         </h3>
       </div>

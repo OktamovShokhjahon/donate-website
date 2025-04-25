@@ -42,7 +42,7 @@ export default function LoginForm() {
     setError(null);
 
     try {
-      const res = await axios.post("https://asspay.up.railway.app/auth/login", {
+      const res = await axios.post("https://api.fastdonate.su/auth/login", {
         username: data.identifier,
         password: data.password,
       });

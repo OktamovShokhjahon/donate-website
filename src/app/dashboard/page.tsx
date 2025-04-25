@@ -33,7 +33,7 @@ function Page() {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("https://asspay.up.railway.app/auth/me", {
+        const res = await axios.get("https://api.fastdonate.su/auth/me", {
           headers: {
             Authorization: token,
           },

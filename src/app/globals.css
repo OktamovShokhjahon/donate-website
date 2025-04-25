@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+body {
+  background-color: #f3f4f6 !important;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

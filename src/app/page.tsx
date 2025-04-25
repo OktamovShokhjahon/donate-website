@@ -1,10 +1,10 @@
-// import GameCarousel from "./components/carousel";
+import GameCarousel from "./components/carousel";
 import GameMarketplace from "./components/game-cards/game-marketplace";
 
 function page() {
   return (
-    <div>
-      {/* <GameCarousel /> */}
+    <div className="">
+      <GameCarousel />
       <GameMarketplace />
     </div>
   );

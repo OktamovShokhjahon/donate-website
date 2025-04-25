@@ -22,7 +22,7 @@ export default function Navbar() {
   useEffect(() => {
     const getUser = (token: string) => {
       axios
-        .get("https://asspay.up.railway.app/auth/me", {
+        .get("https://api.fastdonate.su/auth/me", {
           headers: {
             Authorization: token,
           },
@@ -50,9 +50,6 @@ export default function Navbar() {
     };
 
     checkAuth();
-
-    // const interval = setInterval(checkAuth, 1000);
-    // return () => clearInterval(interval);
   }, []);
 
   const handleNavigation = (path: string) => {
@@ -84,15 +81,15 @@ export default function Navbar() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="text-white font-bold">D</span>
+              <img src="/logo.png" alt="" />
+              {/* <span className="text-white font-bold">D</span> */}
             </motion.div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <span className="font-bold text-lg leading-tight">Donate</span>
-            </div>
+            </div> */}
           </Link>
         </motion.div>
 
-        {/* Mobile menu button */}
         <motion.button
           className="md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -107,7 +104,6 @@ export default function Navbar() {
           <span className="sr-only">Toggle menu</span>
         </motion.button>
 
-        {/* Search bar - hidden on mobile, shown on md and up */}
         <motion.div
           className="hidden md:block flex-1 max-w-xl mx-4"
           initial={{ opacity: 0, y: -20 }}
@@ -149,7 +145,10 @@ export default function Navbar() {
                   </Button>
                 </motion.div>
                 <div>
-                  <span>{formatNumberWithSpaces(balance)} uzs</span>
+                  <span className="flex items-center gap-[5px]">
+                    {formatNumberWithSpaces(balance)}
+                    <img width={20} height={20} src="/coin.png" alt="" />
+                  </span>
                 </div>
               </>
             ) : (
@@ -220,7 +219,10 @@ export default function Navbar() {
                         </Button>
                       </motion.div>
                       <div>
-                        <span>{formatNumberWithSpaces(balance)} uzs</span>
+                        <span className="flex items-center gap-[5px]">
+                          {formatNumberWithSpaces(balance)}{" "}
+                          <img src="/coin.png" width={20} height={20} alt="" />
+                        </span>
                       </div>
                     </div>
                   ) : (
