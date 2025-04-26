@@ -19,9 +19,9 @@ type PriceItem = {
   badges: Array<"orange" | "pink">;
 };
 
-type ChoosedItem = {
-  id: string;
-};
+// type ChoosedItem = {
+//   id: string;
+// };
 
 type Resp = {
   message: string;
