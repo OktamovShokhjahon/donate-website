@@ -36,7 +36,7 @@ function MobileLegendsPage() {
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [priceItems, setPriceItems] = useState<PriceItem[]>([]);
   const [extraItems, setExtraItems] = useState<PriceItem[]>([]);
-  const [choosedItems, setChoosedItems] = useState<ChoosedItem[]>([]);
+  // const [choosedItems, setChoosedItems] = useState<ChoosedItem[]>([]);
   const [userLog, setUserlog] = useState<string[]>([]);
   const [isTutorial, setIsTutorial] = useState<boolean>(false);
   const [weekly, setWeekly] = useState<PriceItem>();
@@ -114,22 +114,22 @@ function MobileLegendsPage() {
     fetchUsername();
   }, [playerId, serverId]);
 
-  function isChoosen(id: number) {
-    const strId = String(id);
+  // function isChoosen(id: number) {
+  //   const strId = String(id);
 
-    const isAlreadyChosen = choosedItems.some((item) => item.id === strId);
+  //   const isAlreadyChosen = choosedItems.some((item) => item.id === strId);
 
-    return isAlreadyChosen;
-  }
+  //   return isAlreadyChosen;
+  // }
 
   const displayedItems = priceItems;
 
   async function handleSubmit() {
     if (playerId && serverId && choosedItemsId.length > 0 && token) {
       try {
-        const products: string[] = [];
+        // const products: string[] = [];
 
-        choosedItems.forEach((item) => products.push(item.id));
+        // choosedItems.forEach((item) => products.push(item.id));
 
         const res = await axios.post(
           `${baseUrl}/merchant/buy`,
@@ -280,11 +280,8 @@ function MobileLegendsPage() {
             {extraItems.map((item) => (
               <div
                 key={item.id}
-                className={`relative cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
-                  isChoosen(item.id)
-                    ? "bg-[#eee]"
-                    : "border border-gray-300 bg-white"
-                }`}
+                className={`border border-gray-300 bg-white relative cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between
+                `}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
@@ -341,11 +338,7 @@ function MobileLegendsPage() {
             {displayedItems.map((item) => (
               <div
                 key={item.id}
-                className={`cursor-pointer relative transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
-                  isChoosen(item.id)
-                    ? "bg-[#eee]"
-                    : "border border-gray-300 bg-white"
-                }`}
+                className={`border border-gray-300 bg-white cursor-pointer relative transition rounded-lg shadow-sm  p-4 flex items-center justify-between`}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
@@ -395,11 +388,9 @@ function MobileLegendsPage() {
           {weekly && (
             <div
               key={weekly.id}
-              className={`relative cursor-pointer  transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
-                isChoosen(weekly.id)
-                  ? "bg-[#eee]"
-                  : "border border-gray-300 bg-white"
-              }`}
+              className={`relative cursor-pointer  transition rounded-lg shadow-sm  p-4 flex items-center justify-between 
+                   border border-gray-300 bg-white
+              `}
             >
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 flex-shrink-0">
