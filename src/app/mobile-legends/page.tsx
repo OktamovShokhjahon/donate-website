@@ -3,19 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import {
-  CheckCircle,
-  CheckIcon,
-  // ChevronDown,
-  // ChevronUp,
-  ClockIcon,
-  Star,
-} from "lucide-react";
+import { CheckCircle, CheckIcon, ClockIcon, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 
 type PriceItem = {
   id: number;
@@ -33,8 +27,9 @@ type Resp = {
   message: string;
 };
 
+const notify = (msg: string) => toast(msg);
+
 function MobileLegendsPage() {
-  // const [showAll, setShowAll] = useState(false);
   const [token, setToken] = useState<string | undefined>(undefined);
   const [playerId, setPlayerId] = useState<string | undefined>(undefined);
   const [serverId, setServerId] = useState<string | undefined>(undefined);
@@ -45,6 +40,7 @@ function MobileLegendsPage() {
   const [userLog, setUserlog] = useState<string[]>([]);
   const [isTutorial, setIsTutorial] = useState<boolean>(false);
   const [weekly, setWeekly] = useState<PriceItem>();
+  const [choosedItemsId, setChoosedItemsId] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -55,8 +51,6 @@ function MobileLegendsPage() {
   const baseUrl = "https://api.fastdonate.su";
 
   useEffect(() => {
-    console.log(priceItems);
-
     async function fetchPrices() {
       try {
         const extras: PriceItem[] = [];
@@ -120,18 +114,6 @@ function MobileLegendsPage() {
     fetchUsername();
   }, [playerId, serverId]);
 
-  function handleChoose(id: number) {
-    const strId = String(id);
-
-    const isAlreadyChosen = choosedItems.some((item) => item.id === strId);
-
-    if (isAlreadyChosen) {
-      setChoosedItems((prev) => prev.filter((item) => item.id !== strId));
-    } else {
-      setChoosedItems((prev) => [...prev, { id: strId }]);
-    }
-  }
-
   function isChoosen(id: number) {
     const strId = String(id);
 
@@ -143,7 +125,7 @@ function MobileLegendsPage() {
   const displayedItems = priceItems;
 
   async function handleSubmit() {
-    if (playerId && serverId && choosedItems.length > 0 && token) {
+    if (playerId && serverId && choosedItemsId.length > 0 && token) {
       try {
         const products: string[] = [];
 
@@ -152,7 +134,7 @@ function MobileLegendsPage() {
         const res = await axios.post(
           `${baseUrl}/merchant/buy`,
           {
-            products,
+            products: choosedItemsId,
             user_id: playerId,
             server_id: serverId,
           },
@@ -165,7 +147,9 @@ function MobileLegendsPage() {
 
         if (res.data.data) {
           res.data.data.forEach((item: Resp) => {
-            setUserlog((prev) => [...prev, item.message]);
+            notify(item.message);
+            setUserlog([]);
+            // setUserlog((prev) => [...prev, item.message]);
           });
         }
       } catch (err) {
@@ -186,8 +170,36 @@ function MobileLegendsPage() {
     }
   }
 
+  function countOfItemsInArray(choosed: string, arr: string[]): number {
+    const count = arr.filter((item) => item === choosed).length;
+    return count;
+  }
+
+  function handleAdd(id: number) {
+    const strId = String(id);
+    setChoosedItemsId((prev) => [...prev, strId]);
+  }
+
+  function handleRemove(id: number) {
+    const strId = String(id);
+
+    setChoosedItemsId((prev) => {
+      const index = prev.indexOf(strId);
+      if (index !== -1) {
+        const updated = [...prev];
+        updated.splice(index, 1);
+        return updated;
+      }
+      return prev;
+    });
+
+    setExtraItems(extraItems);
+  }
+
   return (
     <div className="w-full bg-gray-100 py-2 sm:py-4 px-2 sm:px-4">
+      <ToastContainer />
+
       <div className="sm-container max-w-5xl mx-auto">
         <div className="max-w-4xl mx-auto p-4">
           <div className="rounded-xl p-6 border border-gray-200 shadow-sm">
@@ -273,7 +285,6 @@ function MobileLegendsPage() {
                     ? "bg-[#eee]"
                     : "border border-gray-300 bg-white"
                 }`}
-                onClick={() => handleChoose(item.id)}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
@@ -302,6 +313,24 @@ function MobileLegendsPage() {
                   stroke="yellow"
                   className="absolute top-[-10px] right-[-10px] -rotate-90 animate-customPulse"
                 />
+
+                <div className="absolute -top-[10px] right-[40px] flex items-center gap-[10px]">
+                  <span
+                    className="pt-[1px] px-[8px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-green-600"
+                    onClick={() => handleAdd(item.id)}
+                  >
+                    +
+                  </span>
+                  <span className="pt-[1px] px-[10px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-yellow-600">
+                    {countOfItemsInArray(String(item.id), choosedItemsId)}
+                  </span>
+                  <span
+                    className="pt-[1px] px-[10px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-red-600"
+                    onClick={() => handleRemove(item.id)}
+                  >
+                    -
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -312,12 +341,11 @@ function MobileLegendsPage() {
             {displayedItems.map((item) => (
               <div
                 key={item.id}
-                className={`cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
+                className={`cursor-pointer relative transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
                   isChoosen(item.id)
                     ? "bg-[#eee]"
                     : "border border-gray-300 bg-white"
                 }`}
-                onClick={() => handleChoose(item.id)}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 flex-shrink-0">
@@ -339,6 +367,24 @@ function MobileLegendsPage() {
                       <Image width={20} height={20} src="/coin.png" alt="" />
                     </p>
                   </div>
+
+                  <div className="absolute -top-[10px] right-[0px] flex items-center gap-[10px]">
+                    <span
+                      className="pt-[1px] px-[8px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-green-600"
+                      onClick={() => handleAdd(item.id)}
+                    >
+                      +
+                    </span>
+                    <span className="pt-[1px] px-[10px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-yellow-600">
+                      {countOfItemsInArray(String(item.id), choosedItemsId)}
+                    </span>
+                    <span
+                      className="pt-[1px] px-[10px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-red-600"
+                      onClick={() => handleRemove(item.id)}
+                    >
+                      -
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -349,22 +395,16 @@ function MobileLegendsPage() {
           {weekly && (
             <div
               key={weekly.id}
-              className={`relative cursor-pointer transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
+              className={`relative cursor-pointer  transition rounded-lg shadow-sm  p-4 flex items-center justify-between ${
                 isChoosen(weekly.id)
                   ? "bg-[#eee]"
                   : "border border-gray-300 bg-white"
               }`}
-              onClick={() => handleChoose(weekly.id)}
             >
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 flex-shrink-0">
                   <Image
                     src={"/weekly.webp"}
-                    // src={
-                    //   textToRes(weekly.name) > 500
-                    //     ? "/more-diamond.webp"
-                    //     : "/diamonds.webp"
-                    // }
                     alt={weekly.name}
                     fill
                     className="object-cover rounded-md"
@@ -376,6 +416,24 @@ function MobileLegendsPage() {
                     {weekly.price}{" "}
                     <Image width={20} height={20} src="/coin.png" alt="" />
                   </p>
+                </div>
+
+                <div className="absolute -top-[10px] right-[0px] flex items-center gap-[10px]">
+                  <span
+                    className="pt-[1px] px-[8px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-green-600"
+                    onClick={() => handleAdd(weekly.id)}
+                  >
+                    +
+                  </span>
+                  <span className="pt-[1px] px-[10px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-yellow-600">
+                    {countOfItemsInArray(String(weekly.id), choosedItemsId)}
+                  </span>
+                  <span
+                    className="pt-[1px] px-[10px] flex justify-center items-center pb-[3px] cursor-pointer text-white rounded-full bg-red-600"
+                    onClick={() => handleRemove(weekly.id)}
+                  >
+                    -
+                  </span>
                 </div>
               </div>
             </div>
